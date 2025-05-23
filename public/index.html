@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Motivational Quote Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 40px;
+    }
+    .feelings {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .feeling-btn {
+      padding: 12px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      transition: background 0.3s ease;
+    }
+    .feeling-btn:hover {
+      background-color: #dceffc;
+    }
+    #quote {
+      margin-top: 30px;
+      font-size: 1.3em;
+      color: #2c3e50;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>💡 Motivational Quote Generator</h1>
+  <p>I am feeling... 👇</p>
+
+  <div class="feelings" id="feelingsContainer">
+  </div>
+
+  <div id="quote">Your quote will appear here...</div>
+
+  <script>
+    const feelings = [
+      ["Joy", "😊"],
+      ["Sadness", "😢"],
+      ["Focus", "🎯"],
+      ["Love", "❤️"],
+      ["Hope", "🌈"],
+      ["Anger", "😠"],
+      ["Gratitude", "🙏"],
+      ["Fear", "😨"],
+      ["Success", "🏆"],
+      ["Peace", "🕊️"],
+      ["Confidence", "💪"],
+      ["Creativity", "🎨"],
+      ["Loneliness", "🥺"],
+      ["Resilience", "🛡️"],
+      ["Excitement", "🤩"],
+      ["Anxiety", "😬"],
+      ["Motivation", "🚀"],
+      ["Disappointment", "😞"],
+      ["Happiness", "😁"],
+      ["Mindfulness", "🧘"]
+    ];
+
+    const container = document.getElementById("feelingsContainer");
+    const quoteEl = document.getElementById("quote");
+
+    feelings.forEach(([feeling, emoji]) => {
+      const btn = document.createElement("button");
+      btn.className = "feeling-btn";
+      btn.innerText = `${emoji} ${feeling}`;
+      btn.onclick = () => generateQuote(feeling);
+      container.appendChild(btn);
+    });
+
+    async function generateQuote(feeling) {
+      quoteEl.textContent = "Thinking hard... 🤔";
+
+      try {
+        const res = await fetch(`/generate-quote?theme=${encodeURIComponent(feeling)}`);
+        const data = await res.json();
+        quoteEl.textContent = `"${data.quote}"`;
+      } catch (error) {
+        quoteEl.textContent = "AI fainted. Try again. 😅";
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
